@@ -1,0 +1,24 @@
+package sec01;
+
+public class SmartPhoneExample {
+
+	public static void main(String[] args) {
+		//SmartPhone객체 생성
+		SmartPhone myPhone = new SmartPhone("구글", "안드로이드");
+		
+		String strObj = myPhone.toString();
+		System.out.println("toString()값: " + strObj);
+		System.out.println("myPhone객체를 Smart Print했을 경우의 값: " + myPhone);
+
+		System.out.println("1"); //1
+	
+		System.out.println(1); 	// 1 -> 내부적으로 숫자 1을 toString()메소드에서 문자열로 바꾸어 출력
+
+		System.out.println(0.1); // 0.1 -> 내부적으로 숫자 0.1을 toString()메소드에서 문자열로 바꾸어 출력
+	}
+
+}
+// Object클래스에서 가장 많이 사용되는 메소드들
+// 1. equals()
+// 2. hashCode()
+// 3. toString()

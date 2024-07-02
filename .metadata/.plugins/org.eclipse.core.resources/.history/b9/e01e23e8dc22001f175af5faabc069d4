@@ -1,0 +1,207 @@
+package com.Sohee;
+
+import java.util.Date;
+import java.text.SimpleDateFormat;
+import java.util.Scanner;
+import java.util.List;
+import java.util.ArrayList;
+import java.io.*;
+
+
+public class Planner {
+	private List<Menu> listmenu = new ArrayList<>();
+	
+	Scanner scanner = new Scanner(System.in);
+	private int counter=0;
+	
+	Date today = new Date();
+	SimpleDateFormat day = new SimpleDateFormat("yyyy-MM-dd E요일");
+	Menu menu = new Menu();
+	int balance = 0;
+	
+	public void showMenu() {
+		while(true) {
+			System.out.println("---------------------------------");
+			System.out.print(day.format(today));
+			System.out.println();
+			System.out.println("1.오늘의 목표사용금액 :  ");
+			System.out.println();
+			System.out.println("2. 등록 ");   
+			System.out.println("3. 수정 ");
+			System.out.println("4. 삭제 ");
+			System.out.println("5. 파일저장 ");
+			System.out.println("6. 사용내역조회"+"\n"+ 
+								"7. 잔액확인" + "\n" + 
+								"8. 종료");
+			System.out.println("---------------------------------");
+			System.out.println("선택 > ");
+			
+			//키보드 입력
+			String selectNo = scanner.nextLine();
+			
+			switch (selectNo){
+				case "1":
+					target();	//목표금액
+				case "2":
+					register(); //등록
+					break;
+				case "3":
+					modified(); //수정
+					break;
+				case "4":
+					delete(); //삭제
+					break;
+				case "5":
+					save(); //저장
+					break;
+				case "6":		//조회
+					showList();
+					break;
+				case "7":
+					balcheck(); //잔액확인
+					break;
+				case "8":		//종료
+					System.out.println("프로그램이 종료되었습니다.");
+					return;						
+			}
+			
+		}
+		
+	}
+	
+	// 목표금액 
+	public void target() {
+		
+		System.out.print("오늘의 목표 금액은? :  ");
+		menu.setGoal(Integer.parseInt(scanner.nextLine()));
+		
+	}
+	
+	public void register() {
+		try {
+			
+			menu.setPno(++counter);
+		
+			System.out.print("사용범주: ");
+			menu.setCategory(scanner.nextLine());
+			
+			System.out.print("상품명: ");
+			menu.setName(scanner.nextLine());
+		
+			System.out.print("가격: ");
+			menu.setPrice(Integer.parseInt(scanner.nextLine()));
+			
+			listmenu.add(menu);
+		}catch (Exception e) {
+			System.out.println("등록 에러: " + e.getMessage());
+		}
+	}
+	
+	public void modified() {
+		try {
+			System.out.println("수정할 메뉴를 입력하세요 ");
+			System.out.println("선택 : '목표/사용내역' ");
+			String menuselect = scanner.nextLine();
+			
+			if (menuselect == "목표") {
+				System.out.print("새로운 목표 금액: ");
+				Integer newGoal = Integer.parseInt(scanner.nextLine());
+				menu.setGoal(newGoal);
+			}else {
+				System.out.println("수정할 등록 번호를 입력하세요: ");
+				int Num = Integer.parseInt(scanner.nextLine());
+				for (Menu menu : listmenu) {
+					if(menu.getPno()==Num) {
+						System.out.print("새로운 사용범주: ");
+						String newCategory = scanner.nextLine();
+						menu.setCategory(newCategory);
+						
+						System.out.print("새로운 상품명: ");
+						String newName = scanner.nextLine();
+						menu.setName(newName);
+						
+						System.out.print("새로운 가격: ");
+						Integer newPrice = Integer.parseInt(scanner.nextLine());
+						menu.setPrice(newPrice);
+						
+						System.out.print("사용내역이 수정되었습니다.");
+						
+					}
+				}
+			}
+			
+		}catch(Exception e){
+			System.out.println("등록 에러: " + e.getMessage());
+			
+		}
+		
+			
+	}
+	
+	public void delete() {
+		System.out.println("입력 >> 전체삭제(a/A)/선택삭제(p/P)");
+		String delSelect = scanner.nextLine();
+		if (delSelect =="전체삭제"||delSelect =="a"||delSelect =="A") {
+			System.out.println("정말 삭제하시겠습니까? y/n");
+			String delSelect_yn = scanner.nextLine();
+			if (delSelect_yn =="y"||delSelect_yn =="Y") {
+				listmenu.clear();
+			}else {
+				return;
+			}
+			
+		}else {
+			try {
+			System.out.println("삭제할 등록 번호를 입력하세요: ");
+			int delNum = Integer.parseInt(scanner.nextLine());
+			for (Menu menu : listmenu) {
+				if(menu.getPno()==delNum) {
+					listmenu.remove(menu);
+					System.out.println(delNum + "번 내역이 삭제되었습니다.");					
+				}
+			}
+			System.out.println("해당번호를 찾을 수 없습니다.");
+			}catch(Exception e) {
+				System.out.println("삭제에러" + e.getMessage());
+				
+			}
+		}
+		
+	}
+	
+	public void save() {
+		BufferedWriter bop = new BufferedWriter()
+		
+	}
+	
+	
+	public void showList() {
+		for (Menu m : listmenu) {
+			System.out.println(
+					m.getPno() + "\t" +
+					m.getCategory()+ "\t" +
+					m.getName()+ "\t" +
+					m.getPrice()+ "\t"
+					);
+		}
+		
+	}
+	public void balcheck() {
+		
+		int totalSpent = 0;
+		for (Menu menu : listmenu) {
+			totalSpent+=menu.getPrice();
+		}
+		
+		int balance = menu.getGoal()-totalSpent;
+		
+		System.out.println("목표금액 : " + menu.getGoal());
+		System.out.println("사용금액 : " + totalSpent);
+		System.out.println("잔액은 " + balance + "원 입니다.");
+		
+	}
+				
+		
+	
+
+}

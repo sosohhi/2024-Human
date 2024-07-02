@@ -1,0 +1,14 @@
+package com.Sohee;
+import java.util.Date;
+import java.io.*;
+import java.text.SimpleDateFormat;
+public class Mini1_Project {
+
+	public static void main(String[] args) throws Exception {
+		Planner planner = new Planner();
+		planner.main();
+		planner.showMenu();
+
+	}
+
+}
